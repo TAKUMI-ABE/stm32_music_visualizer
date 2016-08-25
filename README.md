@@ -1,9 +1,10 @@
-# STM32F4discoveryでミュージックヴィジュアライザーを作る
+# STM32F4discoveryでミュージック・ビジュアライザーを作る
 ## Index
 * STM32F4でstd::coutのようにusartを使う  
 * References
 
 ## STM32F4でstd::coutのようにusartを使う  
+ - stm32f4のHALライブラリーを使用する.  
  - my_usart_stream.h  
 
 ```cpp
