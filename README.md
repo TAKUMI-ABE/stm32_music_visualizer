@@ -1,9 +1,20 @@
 # STM32F4discoveryでミュージック・ビジュアライザーを作る
 ## Index
-* STM32F4でstd::coutのようにusartを使う  
+* システムとシーケンス
+* HAL_Delay()関数の修正
+* FFTとIIEフィルタの実装
+* TIPS STM32F4でstd::coutのようにusartを使う  
 * References
 
-## STM32F4でstd::coutのようにusartを使う  
+## システムとシーケンス  
+<img src="images/system.png" width="700">
+<img src="images/sequence.png" width="700">
+
+## HAL_Delay()関数の修正  
+
+## FFTとIIRフィルタの実装  
+
+## TIPS STM32F4でstd::coutのようにusartを使う  
  - stm32f4のHALライブラリーを使用する.  
  - my_usart_stream.h  
 
