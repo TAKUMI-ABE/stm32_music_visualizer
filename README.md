@@ -11,6 +11,27 @@
 <img src="images/sequence.png" width="700">
 
 ## HAL_Delay()関数の修正  
+0Hz~5000Hz程度までの音を可視化するため, 10000Hzで音のサンプリングを行いたい.  
+通常通り周辺回路のTimerを設定してもよいが, HALライブラリではSystemクロックを用いたHal_Delay()関数が用意されているのでそれを用いて簡単にすませたい.  
+しかしHAL_Delay()関数の最小時間は1msであるため修正を加えなければいけない.  
+HAL_Delay()用のクロックの設計はHAL_Init()で行われている. さらにHAL_Init()の中を追っていくとstm32f4xx_hal.cの中の以下の関数に行き着くので修正を加える.  
+
+```cpp
+__weak HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
+{
+  /*Configure the SysTick to have interrupt in 1ms time basis*/
+  //HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000U); ←もともとこうだった
+  HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/10000U); // こう修正した
+
+  /*Configure the SysTick IRQ priority */
+  HAL_NVIC_SetPriority(SysTick_IRQn, TickPriority ,0U);
+
+  /* Return function status */
+  return HAL_OK;
+}
+
+```
+これによってHAL_Delay(1)で100usの待ちをいれることができる.
 
 ## FFTとIIRフィルタの実装  
 
