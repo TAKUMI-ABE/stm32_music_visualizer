@@ -1,7 +1,7 @@
 # STM32F4discoveryでミュージック・ビジュアライザーを作る
 ## Index
 * システムとシーケンス
-* HAL_Delay()関数の修正
+* HAL_Delay() 関数の修正
 * FFTとIIEフィルタの実装
 * TIPS STM32F4でstd::coutのようにusartを使う  
 * References
@@ -10,7 +10,7 @@
 <img src="images/system.png" width="700">
 <img src="images/sequence.png" width="700">
 
-## HAL_Delay()関数の修正  
+## HAL_Delay() 関数の修正  
 0Hz~5000Hz程度までの音を可視化するため, 10000Hzで音のサンプリングを行いたい.  
 通常通り周辺回路のTimerを設定してもよいが, HALライブラリではSystemクロックを用いたHal_Delay()関数が用意されているのでそれを用いて簡単にすませたい.  
 しかしHAL_Delay()関数の最小時間は1msであるため修正を加えなければいけない.  
@@ -34,6 +34,7 @@ __weak HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 これによってHAL_Delay(1)で100usの待ちをいれることができる.
 
 ## FFTとIIRフィルタの実装  
+FFTとIIRフィルタの実装に関しては参考文献にある本の関数をほとんどそのまま使用した. ただし, 原本では配列の確保にcallocを用いているためマイコンで動作せずstd::vectorによって配列を確保した.  
 
 ## TIPS STM32F4でstd::coutのようにusartを使う  
  - stm32f4のHALライブラリーを使用する.  
@@ -71,6 +72,25 @@ usartStream usartStream::operator <<(T val){
 }
 
 #endif // MY_USART_STREAM_H
+```
+
+これをインクルードすることでmain関数内でusartの周辺回路の設定を行った後にstd::coutのように出力を行うことができる.  
+
+```cpp
+UART_HandleTypeDef huart2;
+
+int main(void)
+{
+	HAL_Init()
+    SystemClock_Config();
+	initUsart();
+    
+    usartStream us(huart2);
+    
+    us << "hello world" << 10  << "\r\n";
+
+	return 0;
+}
 ```
 
 ## References
